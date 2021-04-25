@@ -31,16 +31,16 @@ void loop() {
   digitalWrite(trigPin, LOW);
 
   //read the pulse duration on echo pins
-  duration1 = pulseIn(echoPin1, HIGH);
   duration2 = pulseIn(echoPin2, HIGH);
   duration3 = pulseIn(echoPin3, HIGH);
   duration4 = pulseIn(echoPin4, HIGH);
+  duration1 = pulseIn(echoPin1, HIGH);
 
   //calculate the distance from the duration
-  distance1 = 0.00017 * duration1;
   distance2 = 0.00017 * duration2;
   distance3 = 0.00017 * duration3;
   distance4 = 0.00017 * duration4;
+  distance1 = 0.00017 * duration1;
 
   //display result to serial monitor
   Serial.print("Distance 1: ");
