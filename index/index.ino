@@ -3,7 +3,7 @@ int echoPin = 9;
 int trigPin = 8;
 
 //declare other necessary variables
-float duration;
+float duration, distance;
 
 
 void setup() {
@@ -27,9 +27,12 @@ void loop() {
   //read the pulse duration on echo pin
   duration = pulseIn(echoPin, HIGH);
 
+  //calculate the distance from the duration
+  distance = 0.00017 * duration;
+
   //display result to serial monitor
-  Serial.print("Echo Pin Input: ");
-  Serial.println(duration);
+  Serial.print("Distance: ");
+  Serial.println(distance);
 
   //delay for a second until the next reading
   delay(1000);
