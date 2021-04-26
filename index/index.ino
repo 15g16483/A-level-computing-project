@@ -3,10 +3,7 @@ int echoPin1 = 11;
 int echoPin2 = 3;
 int echoPin3 = 10;
 int echoPin4 = 9;
-int trigPin1 = 8;
-int trigPin2 = 7;
-int trigPin3 = 12;
-int trigPin4 = 13;
+int trigPin = 8;
 
 
 //declare other necessary variables
@@ -22,47 +19,24 @@ void setup() {
   pinMode(echoPin2, INPUT);
   pinMode(echoPin3, INPUT);
   pinMode(echoPin4, INPUT);
-  pinMode(trigPin1, OUTPUT);
-  pinMode(trigPin2, OUTPUT);
-  pinMode(trigPin3, OUTPUT);
-  pinMode(trigPin4, OUTPUT);
+  pinMode(trigPin, OUTPUT);
 }
 
 void loop() {
   //reset the trig pins
-  digitalWrite(trigPin1, LOW);
-  digitalWrite(trigPin2, LOW);
-  digitalWrite(trigPin3, LOW);
-  digitalWrite(trigPin4, LOW);
+  digitalWrite(trigPin, LOW);
 
-  //sensor 1
-  digitalWrite(trigPin1, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin1, LOW);
-
+  //define duration vairables before hand to attempt synchronous functionality
   duration1 = pulseIn(echoPin1, HIGH);
-
-  //sensor 2
-  digitalWrite(trigPin2, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin2, LOW);
-
   duration2 = pulseIn(echoPin2, HIGH);
-
-  //sensor 3
-  digitalWrite(trigPin3, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin3, LOW);
-
   duration3 = pulseIn(echoPin3, HIGH);
-  
-  //sensor 4
-  digitalWrite(trigPin4, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin4, LOW);
-  
   duration4 = pulseIn(echoPin4, HIGH);
 
+  //activate sensors
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
   //calculate the distance from the duration
   distance1 = 0.00017 * duration1;
   distance2 = 0.00017 * duration2;
