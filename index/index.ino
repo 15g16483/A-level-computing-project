@@ -15,12 +15,14 @@ void setup() {
   Serial.begin(9600);
 
   //configure the pins to input and output
-  pinMode(echoPin1, INPUT);
-  pinMode(echoPin2, INPUT);
-  pinMode(echoPin3, INPUT);
-  pinMode(echoPin4, INPUT);
-  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, Input);
+  pinMode(trigPin, Output);
 }
+
+float detect(int sens){
+  //activate and read a specific sensor on the robot
+  
+  }
 
 void loop() {
   //reset the trig pins
