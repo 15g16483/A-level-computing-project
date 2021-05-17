@@ -1,10 +1,14 @@
 //file for motor control
 
+#include <DRV8835MotorShield.h>
+
 /*Using the pololu drv8835 motorshield library
  * Reference links:
  * https://github.com/pololu/drv8835-motor-shield
  * https://www.arduino.cc/reference/en/libraries/drv8835motorshield/
  */
+
+DRV8835MotorShield motors;
 
  //define speeds for motors
 int speedF = 400;
@@ -14,29 +18,29 @@ int speedS = 0;
 //functions to be called in other files
 void allstop(){     //"stop" seems to be a reserved keyword
   Serial.println("stopped");
-  void setM1Speed(int speedS);
-  void setM2Speed(int speedS);
+  motors.setM1Speed(speedS);
+  motors.setM2Speed(speedS);
 };
 
 void forward(void){
-  Serial.printlng("forwards");
-  void setM1Speed(int speedF);
-  void setM2Speed(int speedF);
+  Serial.println("forwards");
+  motors.setM2Speed(speedF);
+  motors.setM1Speed(speedF);
 };
 
 void backward(void) {
-  void setM1Speed(int speedB);
-  void setM2Speed(int speedB);
+  motors.setM1Speed(speedB);
+  motors.setM2Speed(speedB);
 };
 
 void left(void) {
-  void setM1Speed(int speedF);
-  void setM2Speed(int speedB);
+  motors.setM1Speed(speedF);
+  motors.setM2Speed(speedB);
   delay(500);
 };
 
 void right(void) {
-  void setM1Speed(int speedB);
-  void setM2Speed(int speedF);
+  motors.setM1Speed(speedB);
+  motors.setM2Speed(speedF);
   delay(500);
 };
