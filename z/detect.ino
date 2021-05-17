@@ -9,9 +9,25 @@ int trigPin = 8;
 
 //declare other necessary variables
 float duration1,duration2,duration3,duration4,distance1,distance2,distance3,distance4;
-void storage(){
-  //configure the pins to input and output
+
+//function to be called to "ping" the environment
+void detect(){
+
+  //set up the pins:
+  int echoPin1 = 11;
+  int echoPin2 = 3;
+  int echoPin3 = 10;
+  int echoPin4 = 9;
+  int trigPin = 8;
+
+  //declare other necessary variables
+  float duration1,duration2,duration3,duration4,distance1,distance2,distance3,distance4;
   
+  //configure the pins to input and output
+  pinMode(echoPin1, INPUT);
+  pinMode(echoPin2, INPUT);
+  pinMode(echoPin3, INPUT);
+  pinMode(trigPin, INPUT);
   //reset the trig pins
     digitalWrite(trigPin, LOW);
   

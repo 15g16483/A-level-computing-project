@@ -1,3 +1,4 @@
+//this file has to be z so that it gets compiled last
 
 void setup() {
   //begin serial communication
@@ -8,8 +9,7 @@ void setup() {
 
 void loop() {
   forward();
-  backward();
-  left();
-  right();
-  
+  delay(3000);
+  allstop();  
+  delay(5000);
 }
