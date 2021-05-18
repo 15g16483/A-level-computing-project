@@ -28,7 +28,7 @@ void forward(void){
   motors.setM1Speed(speedF);
 };
 
-void backward(void) {
+void backwards(void) {
   Serial.println("backwards");
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedB);
