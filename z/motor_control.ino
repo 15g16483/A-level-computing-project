@@ -29,17 +29,20 @@ void forward(void){
 };
 
 void backward(void) {
+  Serial.println("backwards");
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedB);
 };
 
 void left(void) {
+  Serial.println("left");
   motors.setM1Speed(speedF);
   motors.setM2Speed(speedB);
   delay(500);
 };
 
 void right(void) {
+  Serial.println("right");
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedF);
   delay(500);

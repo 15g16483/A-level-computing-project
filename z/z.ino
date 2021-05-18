@@ -8,8 +8,8 @@ void setup() {
 
 
 void loop() {
-  forward();
-  delay(3000);
-  allstop();  
-  delay(5000);
+  right();
+  delay(2000);
+  left();
+  delay(2000);
 }
