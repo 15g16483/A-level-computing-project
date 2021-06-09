@@ -6,6 +6,9 @@ float input[3];
 
 void ping(void) {
   
+  //using println to test if this function is getting called
+  Serial.println("this is being called");
+  
   //using a for loop to iterate through the different pins in the detect file.
   for(int i = 0; i < 3; i++){
     input[i] = detect(i);
@@ -23,11 +26,11 @@ void setup() {
 //loop function is called recursivelly when the arduino is turned on
 
 void loop() {
-  ping;
+  ping();
 
   //cant parse an array into a function so have to do each element individually
   for(int i = 0; i < 3; i++){
-    Serial.print(input[i]);
+    Serial.println(input[i]);
   }
 
   Serial.println("");
