@@ -1,4 +1,4 @@
-//function to be called to "ping" the environment from one sensor
+//function to be called to activate a specific sensor.
 float detect(int dir){
   
   //echopins are 3,5,11
