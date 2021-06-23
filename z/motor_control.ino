@@ -24,8 +24,8 @@ void allstop(){     //"stop" seems to be a reserved keyword
 
 void forward(void){
   Serial.println("forwards");
-  motors.setM2Speed(speedF);
   motors.setM1Speed(speedF);
+  motors.setM2Speed(speedF);
 };
 
 void backwards(void) {

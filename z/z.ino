@@ -21,19 +21,21 @@ void setup() {
   //begin serial communication
   Serial.begin(9600);
 
+
 }
 
 //loop function is called recursivelly when the arduino is turned on
 
-void loop() {
+void loop(){ 
+  //ping the environment
   ping();
 
-  //cant parse an array into a function so have to do each element individually
-  for(int i = 0; i < 3; i++){
-    Serial.println(input[i]);
+  if(input[0] < 0.1){
+    allstop();
   }
+  else {
+    forward();
+  };
 
-  Serial.println("");
-  delay(1000);
-  
+  delay(50);
 }
