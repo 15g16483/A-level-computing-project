@@ -1,8 +1,8 @@
 //function to be called to activate a specific sensor.
 float detect(int dir){
   
-  //echopins are 3,5,11
-  //trig pins are 2,4,12
+  //echopins are front: 3, right: 5, left: 11
+  //trig pins are front: 2, right: 4, left:12
 
   //store pins in arrays for future reference
   int echoPin[3] = {3,5,11};
