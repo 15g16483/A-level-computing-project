@@ -29,3 +29,15 @@ float detect(int dir){
   
   return distance;
 };
+
+//get a distance from each detector returned as an array in the input variable. This can't be in the detect script as it is impossible to return arrays in functions in C.
+
+float input[3];
+
+void ping(void) {
+  
+  //using a for loop to iterate through the different pins in the detect file.
+  for(int i = 0; i < 3; i++){
+    input[i] = detect(i);
+  };
+};

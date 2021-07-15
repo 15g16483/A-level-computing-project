@@ -17,33 +17,38 @@ int speedS = 0;
 
 //functions to be called in other files
 void allstop(){     //"stop" seems to be a reserved keyword
-  Serial.println("stopped");
   motors.setM1Speed(speedS);
   motors.setM2Speed(speedS);
 };
 
 void forward(void){
-  Serial.println("forwards");
   motors.setM1Speed(speedF);
   motors.setM2Speed(speedF);
 };
 
 void backwards(void) {
-  Serial.println("backwards");
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedB);
 };
 
 void left(void) {
-  Serial.println("left");
   motors.setM1Speed(speedF);
   motors.setM2Speed(speedB);
-  delay(500);
+
+  //set the new bearing
+  robot.bearing -= 1;
+  if(robot.bearing == 0){
+    robot.bearing = 4;
+  };
+  delay(2500);
 };
 
 void right(void) {
-  Serial.println("right");
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedF);
-  delay(500);
+  robot.bearing += 1;
+  if(robot.bearing = 5){
+    robot.bearing = 1;
+  };
+  delay(2500);
 };
