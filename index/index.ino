@@ -1,13 +1,14 @@
-//using #include and header files to include both variables and functions in main script
-#include "detect.h"
-#include "mapping.h"
+//using #include and header files to include both variables and functions in main script. Creates a chain of files starting from detect and finishing at index.ino
+
 #include "motor_control.h"
 
+  
 //setup function gets called on arduino startup
 
 void setup() {
   //begin serial communication
   Serial.begin(9600);
+
 }
 
 //loop function is called recursivelly when the arduino is turned on
@@ -17,7 +18,7 @@ void loop(){
   ping();
 
   //update the location at the start of every loop
-  robot.updateLocation(input[0]);
+  robot.updateLocation();
   
   if(input[0] < 0.2){
     allstop();

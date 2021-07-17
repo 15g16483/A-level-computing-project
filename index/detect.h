@@ -34,7 +34,7 @@ float detect(int dir){
 
 float input[3];
 
-void ping(void) {
+void ping() {
   
   //using a for loop to iterate through the different pins in the detect file.
   for(int i = 0; i < 3; i++){

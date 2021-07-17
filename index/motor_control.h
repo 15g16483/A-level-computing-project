@@ -1,6 +1,7 @@
 //file for motor control
 
 #include <DRV8835MotorShield.h>
+#include "mapping.h"
 
 /*Using the pololu drv8835 motorshield library
  * Reference links:

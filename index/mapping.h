@@ -1,3 +1,5 @@
+#include "detect.h"
+
 //builing a parent class so every object will have a 2D coordinate value
 
 class Coordinate {
@@ -19,14 +21,16 @@ class Robot: public Coordinate {
 
   //create constructor for robot
   Robot(){
+    ping(); //call ping so that pingOnLoc in mapping.h has a value.
     x = 0;
     y = 0;
     pingOnLoc[0] = input[0];
   };
   
   //create a method to update the location on call
-  void updateLocation(int distance){
-    if(pingOnLoc[0] - distance >= 10){
+  void updateLocation(){
+    if(pingOnLoc[0] - input[0] >= 0.1){
+      Serial.println("update being called");
       if(bearing = 1){
         y++;
       }else if(bearing = 2){
@@ -48,4 +52,5 @@ class Robot: public Coordinate {
   
 };
 
-Robot robot; //create robot class immediately so that motor-control file can edit bearing value
+//declare class for robot
+Robot robot;
