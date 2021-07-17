@@ -46,7 +46,9 @@ class Robot: public Coordinate {
       };
 
       //for testing purposes
-      Serial.println(x, y);
+      Serial.println(x);
+      Serial.println(y);
+      
     };
   };
   
