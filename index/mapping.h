@@ -5,8 +5,8 @@
 class Coordinate {
   public:
   
-  int x;
-  int y;
+  float x;
+  float y;
   
 };
 
@@ -31,14 +31,14 @@ class Robot: public Coordinate {
   void updateLocation(){
     if(pingOnLoc[0] - input[0] >= 0.1){
       Serial.println("update being called");
-      if(bearing = 1){
-        y++;
-      }else if(bearing = 2){
-        x++;
-      }else if(bearing = 3){
-        y--;
+      if(bearing == 1){
+        y += 0.1;
+      }else if(bearing == 2){
+        x += 0.1;
+      }else if(bearing == 3){
+        y -= 0.1;
       }else{
-        x--;
+        x -= 0.1;
       };
       ping();
       for(int i = 0; i < 3; i++){
@@ -51,7 +51,19 @@ class Robot: public Coordinate {
       
     };
   };
-  
+  void updateBearing(){ //this method handles everything after the bearing has been updated.
+    ping();
+    pingOnLoc[0] = input[0]; //redefine location
+
+    //make sure bearing doesn't become an invalid value
+    if(bearing == 0){
+      bearing = 4;
+    };
+
+    if(bearing == 5) {
+      bearing = 1;
+    };
+  };
 };
 
 //declare class for robot

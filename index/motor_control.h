@@ -38,18 +38,19 @@ void left(void) {
 
   //set the new bearing
   robot.bearing -= 1;
-  if(robot.bearing == 0){
-    robot.bearing = 4;
-  };
-  delay(2500);
+  
+  delay(4000);
+
+  robot.updateBearing(); //handle post update bearing
 };
 
 void right(void) {
   motors.setM1Speed(speedB);
   motors.setM2Speed(speedF);
+  
   robot.bearing += 1;
-  if(robot.bearing = 5){
-    robot.bearing = 1;
-  };
-  delay(2500);
+  
+  delay(4000);
+
+  robot.updateBearing(); //handle post bearing update
 };
