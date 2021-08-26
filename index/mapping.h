@@ -1,5 +1,6 @@
 #include "detect.h"
 
+
 //builing a parent class so every object will have a 2D coordinate value
 
 class Coordinate {
@@ -63,6 +64,47 @@ class Robot: public Coordinate {
     if(bearing == 5) {
       bearing = 1;
     };
+  };
+};
+
+//class for obstacles in the environment. Also handles classification of empty spaces.
+
+class Point: public Coordinate {
+  public:
+
+  int explored = 0; //every point at first is unexplored
+
+  int obstacle = 0; //until we know what the point it, it cannot be an obstacle
+
+
+  
+  
+};
+
+int generateNum = 0; //this is the number of points that has been generated. 
+
+
+//start positions of each of the generated points stored here to prevent repeats
+float generated[100][2];
+
+//generate a 1x1 metre area of unexplored area. 
+void generate(float start[2]) {
+  bool isAlreadyGen = false;
+  for(int i = 0; i < 100; i++){
+    if(start == generated[i]){
+      isAlreadyGen = true;
+    };
+  };
+  if(isAlreadyGen == false){
+    for(int z = 0; z < 10; z++){
+      for(int i = 0; i < 10; i++){
+        Point id;
+        generateNum.x = start[0] + i/10;
+        generateNum.y = start[1] + z/10;
+        generateNum++;
+      };
+    };
+    generated[generateNum/100] = start;
   };
 };
 

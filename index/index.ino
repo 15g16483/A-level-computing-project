@@ -9,7 +9,7 @@ void setup() {
   //begin serial communication
   Serial.begin(9600);
 
-}
+};
 
 //loop function is called recursivelly when the arduino is turned on
 
