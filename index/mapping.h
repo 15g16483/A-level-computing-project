@@ -93,12 +93,11 @@ void upMap() {
 
     //check if we are hitting the wall
     bool wallHit = false;
-    while(wallHit = false){
+    while(wallHit == false){
       for(int dist = 0; dist < 40; dist++){
         if(dist/10 >= robot.pingOnLoc[look]) {
           wallHit = true;
-        }
-      
+        };
       
         //handles the assigning of the coordinate depending on the direction and used sensor. 
         //!!!WARNING!!! IF STATEMENT HELL AHEAD
@@ -158,6 +157,7 @@ void upMap() {
           if(wallHit = false && isElementPresent == false){
             space[nextSpace][0] = coordinate[0];
             space[nextSpace][1] = coordinate[1];
+
             
             nextSpace++;
           }else if(isElementPresent == false){
