@@ -46,6 +46,8 @@ class Robot: public Coordinate {
       };
       return true;
       
+    }else{
+      return false;
     };
   };
   void updateBearing(){ //this method handles everything after the bearing has been updated.
@@ -68,9 +70,9 @@ Robot robot;
 
 //these are the arrays that hold the points that are free and the points that are obstacles. Storing the coordinate values as int so I can store more. Just needs simple conversion to turn back to float form. 
 
-int space[8116][2]; 
+int space[16][2]; 
 int nextSpace = 0;
-int obstacle[8116][2];
+int obstacle[16][2];
 int nextObstacle = 0;
 int coordinate[2];
 
@@ -90,83 +92,82 @@ bool coordRecorded(){
 void upMap() {
   
   for(int look = 0; look < 3; look++){
+    Serial.println(look);
 
     //check if we are hitting the wall
     bool wallHit = false;
-    while(wallHit == false){
-      for(int dist = 0; dist < 40; dist++){
-        if(dist/10 >= robot.pingOnLoc[look]) {
-          wallHit = true;
-        };
-      
-        //handles the assigning of the coordinate depending on the direction and used sensor. 
-        //!!!WARNING!!! IF STATEMENT HELL AHEAD
-        if(robot.bearing == 1){
-          if(look = 0){
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y + dist/10)*10;
-          }
-          if(look = 1){
-            coordinate[0] = (robot.x  + dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }else{
-            coordinate[0] = (robot.x  - dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }
-        }else if(robot.bearing == 2){
-          if(look = 0){
-            coordinate[0] = (robot.x  + dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }
-          if(look = 1){
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y - dist/10)*10;
-          }else{
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y + dist/10)*10;
-          }
-        }else if(robot.bearing == 3){
-          if(look = 0){
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y - dist/10)*10;
-          }
-          if(look = 1){
-            coordinate[0] = (robot.x - dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }else{
-            coordinate[0] = (robot.x + dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }
-        }else{
-          if(look = 0){
-            coordinate[0] = (robot.x - dist/10)*10;
-            coordinate[1] = (robot.y)*10;
-          }
-          if(look = 1){
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y + dist/10)*10;
-          }else{
-            coordinate[0] = (robot.x)*10;
-            coordinate[1] = (robot.y - dist/10)*10;
-          }
-        };
-          //check the arrays to see if the coordinate is already recorded.
-          bool isElementPresent = coordRecorded();
-
-          //assign the coordinate to the relevant storage array
-          if(wallHit = false && isElementPresent == false){
-            space[nextSpace][0] = coordinate[0];
-            space[nextSpace][1] = coordinate[1];
-
-            
-            nextSpace++;
-          }else if(isElementPresent == false){
-            obstacle[nextObstacle][0] = coordinate[0];
-            obstacle[nextObstacle][1] = coordinate[1];
-            nextObstacle++;
-          }
+    for(int dist = 0; dist < 40; dist++){
+      //Serial.println(dist);
+      if(dist/10 >= robot.pingOnLoc[look]) {
+        wallHit = true;
+        dist = 50;
         
-      }
-    }
-  }
-};
+      };
+    
+      //handles the assigning of the coordinate depending on the direction and used sensor. 
+      //!!!WARNING!!! IF STATEMENT HELL AHEAD
+      if(robot.bearing == 1){
+        if(look == 0){
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y + dist/10)*10;
+        }else if(look == 1){
+          coordinate[0] = (robot.x  + dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        }else{
+          coordinate[0] = (robot.x  - dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        };
+      }else if(robot.bearing == 2){
+        if(look == 0){
+          coordinate[0] = (robot.x  + dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        }else if(look == 1){
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y - dist/10)*10;
+        }else{
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y + dist/10)*10;
+        };
+      }else if(robot.bearing == 3){
+        if(look == 0){
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y - dist/10)*10;
+        }else if(look == 1){
+          coordinate[0] = (robot.x - dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        }else{
+          coordinate[0] = (robot.x + dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        };
+      }else{
+        if(look == 0){
+          coordinate[0] = (robot.x - dist/10)*10;
+          coordinate[1] = (robot.y)*10;
+        }else if(look == 1){
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y + dist/10)*10;
+        }else{
+          coordinate[0] = (robot.x)*10;
+          coordinate[1] = (robot.y - dist/10)*10;
+        };
+      };
+        //check the arrays to see if the coordinate is already recorded.
+        bool isElementPresent = coordRecorded();
+
+        //assign the coordinate to the relevant storage array
+        if(wallHit == false && isElementPresent == false){
+          space[nextSpace][0] = coordinate[0];
+          space[nextSpace][1] = coordinate[1];
+
+          
+          nextSpace++;
+        }else if(isElementPresent == false){
+          obstacle[nextObstacle][0] = coordinate[0];
+          obstacle[nextObstacle][1] = coordinate[1];
+          nextObstacle++;
+        };
+        Serial.println(dist);
+      
+    }; //for loop
+  }; //for loop
+}; //function
