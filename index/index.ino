@@ -26,17 +26,17 @@ void loop(){
 
     //testing purposes
     Serial.println("spaces:"); 
-    for(int i = 0; i < 10; i++){
-      Serial.print(space[i][0]);
+    for(int z = 0; z < 30; z++){
+      Serial.print(space[z][0]);
       Serial.print(",");
-      Serial.print(space[i][1]);
+      Serial.print(space[z][1]);
       Serial.print("; ");
     };
     Serial.println("obstacles:"); 
-    for(int i = 0; i < 10; i++){
-      Serial.print(obstacle[i][0]);
+    for(int z = 0; z < 30; z++){
+      Serial.print(obstacle[z][0]);
       Serial.print(",");
-      Serial.print(obstacle[i][1]);
+      Serial.print(obstacle[z][1]);
       Serial.print("; ");
     };
   };

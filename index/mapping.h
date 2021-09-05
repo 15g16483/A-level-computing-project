@@ -70,22 +70,23 @@ Robot robot;
 
 //these are the arrays that hold the points that are free and the points that are obstacles. Storing the coordinate values as int so I can store more. Just needs simple conversion to turn back to float form. 
 
-int space[16][2]; 
+int space[300][2]; 
 int nextSpace = 0;
-int obstacle[16][2];
+int obstacle[50][2];
 int nextObstacle = 0;
 int coordinate[2];
 
  //now we need to check if this coordinate has already been recorded. Used later on in the main function
 bool coordRecorded(){
-  for(int i = 0; i < 8116; i++){
-    if(space[i] == coordinate || obstacle[i] == coordinate){
+  for(int i = 0; i < 300; i++){
+    if((space[i][0] == coordinate[0] && space[i][1] == coordinate[1]) || (obstacle[i][0] == coordinate[0] && obstacle[i][1] == coordinate[1])){
       return true;
     }else if(i  >= nextSpace && i >= nextObstacle){
       return false;
     }else{
     };
   };
+  return false;
 };
 
 void upMap() {
@@ -164,6 +165,7 @@ void upMap() {
         }else if(isElementPresent == false){
           obstacle[nextObstacle][0] = coordinate[0];
           obstacle[nextObstacle][1] = coordinate[1];
+          
           nextObstacle++;
         };
       
