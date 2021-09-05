@@ -84,7 +84,6 @@ bool coordRecorded(){
     }else if(i  >= nextSpace && i >= nextObstacle){
       return false;
     }else{
-      return false;
     };
   };
 };
@@ -92,15 +91,16 @@ bool coordRecorded(){
 void upMap() {
   
   for(int look = 0; look < 3; look++){
-    Serial.println(look);
 
     //check if we are hitting the wall
     bool wallHit = false;
-    for(int dist = 0; dist < 40; dist++){
-      //Serial.println(dist);
-      if(dist/10 >= robot.pingOnLoc[look]) {
+    for(int i = 0; i < 40; i++){
+
+      float dist = (float)i/(float)10; //cast the opperands to floats so that the division can take place
+      
+      if(dist > robot.pingOnLoc[look]) {
         wallHit = true;
-        dist = 50;
+        i = 50;
         
       };
     
@@ -109,46 +109,46 @@ void upMap() {
       if(robot.bearing == 1){
         if(look == 0){
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y + dist/10)*10;
+          coordinate[1] = (robot.y + dist)*10;
         }else if(look == 1){
-          coordinate[0] = (robot.x  + dist/10)*10;
+          coordinate[0] = (robot.x  + dist)*10;
           coordinate[1] = (robot.y)*10;
         }else{
-          coordinate[0] = (robot.x  - dist/10)*10;
+          coordinate[0] = (robot.x  - dist)*10;
           coordinate[1] = (robot.y)*10;
         };
       }else if(robot.bearing == 2){
         if(look == 0){
-          coordinate[0] = (robot.x  + dist/10)*10;
+          coordinate[0] = (robot.x  + dist)*10;
           coordinate[1] = (robot.y)*10;
         }else if(look == 1){
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y - dist/10)*10;
+          coordinate[1] = (robot.y - dist)*10;
         }else{
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y + dist/10)*10;
+          coordinate[1] = (robot.y + dist)*10;
         };
       }else if(robot.bearing == 3){
         if(look == 0){
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y - dist/10)*10;
+          coordinate[1] = (robot.y - dist)*10;
         }else if(look == 1){
-          coordinate[0] = (robot.x - dist/10)*10;
+          coordinate[0] = (robot.x - dist)*10;
           coordinate[1] = (robot.y)*10;
         }else{
-          coordinate[0] = (robot.x + dist/10)*10;
+          coordinate[0] = (robot.x + dist)*10;
           coordinate[1] = (robot.y)*10;
         };
       }else{
         if(look == 0){
-          coordinate[0] = (robot.x - dist/10)*10;
+          coordinate[0] = (robot.x - dist)*10;
           coordinate[1] = (robot.y)*10;
         }else if(look == 1){
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y + dist/10)*10;
+          coordinate[1] = (robot.y + dist)*10;
         }else{
           coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y - dist/10)*10;
+          coordinate[1] = (robot.y - dist)*10;
         };
       };
         //check the arrays to see if the coordinate is already recorded.
@@ -166,7 +166,6 @@ void upMap() {
           obstacle[nextObstacle][1] = coordinate[1];
           nextObstacle++;
         };
-        Serial.println(dist);
       
     }; //for loop
   }; //for loop

@@ -22,6 +22,8 @@ void loop(){
     //once location updated, update the map with the new information
     upMap();
 
+    
+
     //testing purposes
     Serial.println("spaces:"); 
     for(int i = 0; i < 10; i++){
@@ -29,15 +31,17 @@ void loop(){
       Serial.print(",");
       Serial.print(space[i][1]);
       Serial.print("; ");
-    }
+    };
     Serial.println("obstacles:"); 
     for(int i = 0; i < 10; i++){
       Serial.print(obstacle[i][0]);
       Serial.print(",");
       Serial.print(obstacle[i][1]);
       Serial.print("; ");
-    }
-  }
+    };
+  };
+
+  //Serial.println("this is a loop");
 
   //current navigation code to control where the robot goes based on the surroundings
   if(input[0] < 0.2){
