@@ -36,16 +36,16 @@ void identifyTarget() {
     
     //now that the obstacle have been eliminated, check within the spaces array
     for(int a = 0; a < 4; a++){
-      Serial.println(";");
-      Serial.print(neighbours[a][0]);
-      Serial.print(",");
-      Serial.println(neighbours[a][1]);
-      if(neighbours[a][0] != 0 && neighbours[a][1] != 0){
+//      Serial.println(";");
+//      Serial.print(neighbours[a][0]);
+//      Serial.print(",");
+//      Serial.println(neighbours[a][1]);
+      if((neighbours[a][0] == 0 && neighbours[a][1] != 0) || (neighbours[a][0] != 0 && neighbours[a][1] == 0) || (neighbours[a][0] != 0 && neighbours[a][1] != 0)){
         for(int s = nextSpace - 1; s > 0; s--){
-          Serial.println(":");
-          Serial.print(space[s][0]);
-          Serial.print(",");
-          Serial.println(space[s][1]);
+//          Serial.println(":");
+//          Serial.print(space[s][0]);
+//          Serial.print(",");
+//          Serial.println(space[s][1]);
           if(neighbours[a][0] == space[s][0] && neighbours[a][1] == space[s][1]){
             neighbExplored++;
             s = 0;
