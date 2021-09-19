@@ -15,8 +15,8 @@ void setup() {
 
 void loop(){ 
   identifyTarget();
-  //Serial.println(target[0]);
-  //Serial.println(target[1]);
+  Serial.println(target[0]);
+  Serial.println(target[1]);
   delay(10000);
 
 
