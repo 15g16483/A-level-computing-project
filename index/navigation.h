@@ -9,6 +9,10 @@ int target[2]; //the target for the routing algorithm
 void identifyTarget() {
   bool targetFound = false;
   for(int i = nextSpace - 1; i > 0; i--){
+    Serial.println("!");
+    Serial.print(space[i][0]);
+    Serial.print(",");
+    Serial.println(space[i][1]);
 
     //find the neighbours of the space and put into list
     int neighbours[4][2] = {{space[i][0], space[i][1] + 1}, {space[i][0] + 1, space[i][1]}, {space[i][0], space[i][1] - 1}, {space[i][0] - 1, space[i][1]}}; // top, right, bottom, left
@@ -32,8 +36,16 @@ void identifyTarget() {
     
     //now that the obstacle have been eliminated, check within the spaces array
     for(int a = 0; a < 4; a++){
+      Serial.println(";");
+      Serial.print(neighbours[a][0]);
+      Serial.print(",");
+      Serial.println(neighbours[a][1]);
       if(neighbours[a][0] != 0 && neighbours[a][1] != 0){
         for(int s = nextSpace - 1; s > 0; s--){
+          Serial.println(":");
+          Serial.print(space[s][0]);
+          Serial.print(",");
+          Serial.println(space[s][1]);
           if(neighbours[a][0] == space[s][0] && neighbours[a][1] == space[s][1]){
             neighbExplored++;
             s = 0;
