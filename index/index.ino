@@ -19,6 +19,16 @@ void loop(){
   Serial.println(target[1]);
   delay(10000);
 
+  //expecting to see count down through coordinates from target down to the robots location (0,7)
+  if(planRoute() == true){
+    Serial.println("coordsToVisit:");
+    for(int i = 0; i < 20; i++){
+      Serial.print(coordsToVisit[i][0]);
+      Serial.print(",");
+      Serial.println(coordsToVisit[i][1]);
+    }
+  }
+
 
 
 

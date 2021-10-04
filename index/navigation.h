@@ -2,9 +2,11 @@
 
 int instructions[10][2]; //first number is the bearing, second is the distance in terms of how many coordinate points to move. 
 
-int coordsToVisit[20][2]; //where the routing algorithm will push the coords to visit too. 
-
 int target[2]; //the target for the routing algorithm
+
+int coordsToVisit[20][2]; //where the plan route function pushes its output to
+
+int coordsToVisitLength = 0; //hae to read coordsToVisit in reverese, so this points to end of array.
 
 void identifyTarget() {
   bool targetFound = false;
@@ -57,11 +59,96 @@ void identifyTarget() {
   };
 };
 
-void planRoute() { //find which coordinates the robot needs to visit
+bool planRoute() { //find which coordinates the robot needs to visit
   //can only use 300 bytes of local variables within this function
+
+  int nextCheck[80][4] = {{robot.x + 1, robot.y, robot.x, robot.y},{robot.x, robot.y + 1, robot.x, robot.y},{robot.x - 1, robot.y, robot.x, robot.y},{robot.x, robot.y - 1, robot.x, robot.y}};
+
+  int checkSpace = 4; //next free space in nextCheck array, 
+
+  int checking = 0; //pointer to element currently processing in nextCheck array
+
+  int neighbour[2]; //holds the neighbour of the point being checked
+
+  while(true){
+    //find if the coordinate we are checking is a space.
+    bool inSpace = false;
+    for(int i = nextSpace - 1; i > 0; i--){ 
+      if(nextCheck[checking][0] == space[i][0] && nextCheck[checking][1] == space[i][1]){
+        i = 0;
+        inSpace = true;
+      };
+    };
+    if(nextCheck[checking][0] == target[0] && nextCheck[checking][1] == target[1]) {
+      //builds the coordsToVisit array
+      int nextUpload[2] = {nextCheck[checking][0], nextCheck[checking][1]};
+      for(int i = checking; i > 0; i--){
+        coordsToVisit[coordsToVisitLength][0] = nextUpload[0];
+        coordsToVisit[coordsToVisitLength][1] = nextUpload[1];
+
+        //check if we have reached the robot yet
+        if(coordsToVisit[coordsToVisitLength][0] == robot.x && coordsToVisit[coordsToVisitLength][1] == robot.y){
+          return true;
+        };
+
+        nextUpload[0] = nextCheck[checking][2];
+        nextUpload[1] = nextCheck[checking][3];
+
+        coordsToVisitLength++;
+
+      }
+    } else if(inSpace == true){
+      //find the neighbours of the coordinate. these should be visited next.
+      for(int i = 0; i < 4; i++){
+        switch(i) { //indentify between the neighbours
+          case 0:
+            neighbour[0] = nextCheck[checking][0];
+            neighbour[1] = nextCheck[checking][1] + 1;
+          case 1:
+            neighbour[0] = nextCheck[checking][0] + 1;
+            neighbour[1] = nextCheck[checking][1];
+          case 2:
+            neighbour[0] = nextCheck[checking][0];
+            neighbour[1] = nextCheck[checking][1] - 1;
+          case 3:
+            neighbour[0] = nextCheck[checking][0] - 1;
+            neighbour[1] = nextCheck[checking][1];
+        };
+        //check if the neighbour already exists in the nextCheck array
+        bool exist = false;
+        for(int z = checkSpace - 1; z > 0; z--){
+          if(neighbour[0] == nextCheck[z][0] && neighbour[1] == nextCheck[z][1]){
+            exist = true;
+            z = 0;
+          };
+        }; 
+        if(exist == false){
+          //set the next element to check to the neighbour
+          nextCheck[checkSpace][0] = neighbour[0];
+          nextCheck[checkSpace][1] = neighbour[1];
+          nextCheck[checkSpace][2] = nextCheck[checking][0];
+          nextCheck[checkSpace][3] = nextCheck[checking][1];
+  
+          //increment the next space to load.
+          checkSpace++;
+          if(checkSpace == 80){
+            //no more memory so have to return false
+            return false;
+          };
+        };
+      };
+    };
+    
+    //after each check, need to update what to check for next iteration   
+    checking++; //increment the next item to check
+    if(checking == 80){
+      return false;
+    };
+  }
+  
   
 };  
 
-void compileRoute() { //turn the coordinates into instructions for the robot.
+void compileRoute() { //turn the coordinates into instructions for the robot. make as efficient as possible
   
 };

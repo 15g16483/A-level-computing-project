@@ -6,8 +6,8 @@
 class Coordinate {
   public:
   
-  float x;
-  float y;
+  int x;
+  int y;
   
 };
 
@@ -23,8 +23,9 @@ class Robot: public Coordinate {
   //create constructor for robot
   Robot(){
     ping(); //call ping so that pingOnLoc in mapping.h has a value.
+    //artificially name location for 5.2 test
     x = 0;
-    y = 0;
+    y = 7;
     pingOnLoc[0] = input[0];
   };
   
@@ -32,13 +33,13 @@ class Robot: public Coordinate {
   bool updateLocation(){
     if(pingOnLoc[0] - input[0] >= 0.1){
       if(bearing == 1){
-        y += 0.1;
+        y += 1;
       }else if(bearing == 2){
-        x += 0.1;
+        x += 1;
       }else if(bearing == 3){
-        y -= 0.1;
+        y -= 1;
       }else{
-        x -= 0.1;
+        x -= 1;
       };
       ping();
       for(int i = 0; i < 3; i++){
@@ -98,9 +99,9 @@ void upMap() {
     bool wallHit = false;
     for(int i = 0; i < 40; i++){
 
-      float dist = (float)i/(float)10; //cast the opperands to floats so that the division can take place
+      int dist = i; //cast the opperands to floats so that the division can take place
       
-      if(dist > robot.pingOnLoc[look]) {
+      if((float)dist/(float)10 > robot.pingOnLoc[look]) {
         wallHit = true;
         i = 50;
         
@@ -110,25 +111,25 @@ void upMap() {
       //!!!WARNING!!! IF STATEMENT HELL AHEAD
       if(robot.bearing == 1){
         if(look == 0){
-          coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y + dist)*10;
+          coordinate[0] = robot.x;
+          coordinate[1] = robot.y + dist;
         }else if(look == 1){
-          coordinate[0] = (robot.x  + dist)*10;
-          coordinate[1] = (robot.y)*10;
+          coordinate[0] = robot.x  + dist;
+          coordinate[1] = robot.y;
         }else{
-          coordinate[0] = (robot.x  - dist)*10;
-          coordinate[1] = (robot.y)*10;
+          coordinate[0] = robot.x  - dist;
+          coordinate[1] = robot.y;
         };
       }else if(robot.bearing == 2){
         if(look == 0){
-          coordinate[0] = (robot.x  + dist)*10;
-          coordinate[1] = (robot.y)*10;
+          coordinate[0] = robot.x  + dist;
+          coordinate[1] = robot.y;
         }else if(look == 1){
-          coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y - dist)*10;
+          coordinate[0] = robot.x;
+          coordinate[1] = robot.y - dist;
         }else{
-          coordinate[0] = (robot.x)*10;
-          coordinate[1] = (robot.y + dist)*10;
+          coordinate[0] = robot.x;
+          coordinate[1] = robot.y + dist;
         };
       }else if(robot.bearing == 3){
         if(look == 0){
