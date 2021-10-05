@@ -179,9 +179,9 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
   int inc = 0; //default incrementing forwards
   int instructionc = 0; //pointer to free element in instruction set
   int upc = 0;
-  int rightc = 0;
-  int downc = 0;
-  int leftc = 0;
+  int rightc = 1;
+  int downc = 1;
+  int leftc = 1;
   for(int i = coordsToVisitLength; i > -1; i--){
     //find where the points would be
     int up[2] = {coordsToVisit[i][0],coordsToVisit[i][1] + 1};
@@ -213,8 +213,7 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
     if(left[0] == coordsToVisit[i-1][0] && left[1] == coordsToVisit[i-1][1]){
       newDir = 3;
     }
-    //Serial.println(newDir);
-    if(newDir == oldDir){
+    if(newDir == oldDir && i != 0){
       switch(inc){
         case 0:
           upc++;
@@ -231,7 +230,7 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
       }
     }else{
       //pass the instruction
-      newDir = inc;
+      inc = newDir;
       instructions[instructionc][0] = oldDir;
       switch(oldDir){
         case 0:
@@ -247,8 +246,16 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
           instructions[instructionc][1] = leftc;
           break;
       }
+      upc = 0;
+      rightc = 0;
+      downc = 0;
+      leftc = 0;
+      instructionc++;
     }
-    newDir = oldDir;
+//    Serial.println("ch");
+//    Serial.println(newDir);
+//    Serial.println(oldDir);
+    oldDir = newDir;
     
   }
 };
