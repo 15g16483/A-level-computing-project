@@ -116,30 +116,40 @@ bool planRoute() { //find which coordinates the robot needs to visit
           case 0:
             neighbour[0] = nextCheck[checking][0];
             neighbour[1] = nextCheck[checking][1] + 1;
+            break;
           case 1:
             neighbour[0] = nextCheck[checking][0] + 1;
             neighbour[1] = nextCheck[checking][1];
+            break;
           case 2:
             neighbour[0] = nextCheck[checking][0];
             neighbour[1] = nextCheck[checking][1] - 1;
+            break;
           case 3:
             neighbour[0] = nextCheck[checking][0] - 1;
             neighbour[1] = nextCheck[checking][1];
+            break;
         };
         //check if the neighbour already exists in the nextCheck array
         bool exist = false;
         bool neighbInSpace = false;
-        for(int z = checkSpace - 1; z > 0; z--){
-          for(int c = nextSpace - 1; c > 0; c--){
-            if(neighbour[0] == space[i] && neighbour[1] == space[1]){
-              neighbInSpace = true;
-            }
+        for(int c = nextSpace - 1; c > 0; c--){
+          if(neighbour[0] == space[c][0] && neighbour[1] == space[c][1]){
+            neighbInSpace = true;
+            c = 0;
           }
+        }
+        for(int z = checkSpace - 1; z > 0; z--){
           if(neighbour[0] == nextCheck[z][0] && neighbour[1] == nextCheck[z][1] ){
             exist = true;
             z = 0;
           };
         }; 
+//        Serial.println(exist);
+//        Serial.println(neighbInSpace);
+//        Serial.print(neighbour[0]);
+//        Serial.print(",");
+//        Serial.println(neighbour[1]);
         if(exist == false && neighbInSpace == true){
           //set the next element to check to the neighbour
           nextCheck[checkSpace][0] = neighbour[0];
