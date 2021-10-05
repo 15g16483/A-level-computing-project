@@ -9,6 +9,7 @@ int coordsToVisit[20][2]; //where the plan route function pushes its output to
 int coordsToVisitLength = 0; //hae to read coordsToVisit in reverese, so this points to end of array.
 
 void identifyTarget() {
+  Serial.println("target");
   bool targetFound = false;
   for(int i = nextSpace - 1; i > 0; i--){
 
@@ -62,15 +63,18 @@ void identifyTarget() {
 bool planRoute() { //find which coordinates the robot needs to visit
   //can only use 300 bytes of local variables within this function
 
-  int nextCheck[80][4] = {{robot.x + 1, robot.y, robot.x, robot.y},{robot.x, robot.y + 1, robot.x, robot.y},{robot.x - 1, robot.y, robot.x, robot.y},{robot.x, robot.y - 1, robot.x, robot.y}};
+  int nextCheck[80][4] = {{robot.x, robot.y, robot.x, robot.y}};
 
-  int checkSpace = 4; //next free space in nextCheck array, 
+  int checkSpace = 1; //next free space in nextCheck array, 
 
   int checking = 0; //pointer to element currently processing in nextCheck array
 
   int neighbour[2]; //holds the neighbour of the point being checked
 
+  Serial.println("hello");
+
   while(true){
+   // Serial.println(checking);
     //find if the coordinate we are checking is a space.
     bool inSpace = false;
     for(int i = nextSpace - 1; i > 0; i--){ 
@@ -79,6 +83,14 @@ bool planRoute() { //find which coordinates the robot needs to visit
         inSpace = true;
       };
     };
+    Serial.println(checkSpace);
+    Serial.println(checking);
+    Serial.print(nextCheck[checking][0]);
+    Serial.print(",");
+    Serial.println(nextCheck[checking][1]);
+    Serial.print(target[0]);
+    Serial.print(",");
+    Serial.println(target[1]);
     if(nextCheck[checking][0] == target[0] && nextCheck[checking][1] == target[1]) {
       //builds the coordsToVisit array
       int nextUpload[2] = {nextCheck[checking][0], nextCheck[checking][1]};
@@ -116,13 +128,19 @@ bool planRoute() { //find which coordinates the robot needs to visit
         };
         //check if the neighbour already exists in the nextCheck array
         bool exist = false;
+        bool neighbInSpace = false;
         for(int z = checkSpace - 1; z > 0; z--){
-          if(neighbour[0] == nextCheck[z][0] && neighbour[1] == nextCheck[z][1]){
+          for(int c = nextSpace - 1; c > 0; c--){
+            if(neighbour[0] == space[i] && neighbour[1] == space[1]){
+              neighbInSpace = true;
+            }
+          }
+          if(neighbour[0] == nextCheck[z][0] && neighbour[1] == nextCheck[z][1] ){
             exist = true;
             z = 0;
           };
         }; 
-        if(exist == false){
+        if(exist == false && neighbInSpace == true){
           //set the next element to check to the neighbour
           nextCheck[checkSpace][0] = neighbour[0];
           nextCheck[checkSpace][1] = neighbour[1];
@@ -133,6 +151,7 @@ bool planRoute() { //find which coordinates the robot needs to visit
           checkSpace++;
           if(checkSpace == 80){
             //no more memory so have to return false
+            Serial.println("f1");
             return false;
           };
         };
@@ -142,6 +161,7 @@ bool planRoute() { //find which coordinates the robot needs to visit
     //after each check, need to update what to check for next iteration   
     checking++; //increment the next item to check
     if(checking == 80){
+      Serial.println("f2");
       return false;
     };
   }

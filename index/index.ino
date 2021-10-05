@@ -17,7 +17,7 @@ void loop(){
   identifyTarget();
   Serial.println(target[0]);
   Serial.println(target[1]);
-  delay(10000);
+  //delay(500);
 
   //expecting to see count down through coordinates from target down to the robots location (0,7)
   if(planRoute() == true){
@@ -28,6 +28,7 @@ void loop(){
       Serial.println(coordsToVisit[i][1]);
     }
   }
+  delay(10000);
 
 
 
