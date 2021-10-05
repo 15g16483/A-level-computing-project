@@ -179,9 +179,9 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
   int inc = 0; //default incrementing forwards
   int instructionc = 0; //pointer to free element in instruction set
   int upc = 0;
-  int rightc = 1;
-  int downc = 1;
-  int leftc = 1;
+  int rightc = 0;
+  int downc = 0;
+  int leftc = 0;
   for(int i = coordsToVisitLength; i > -1; i--){
     //find where the points would be
     int up[2] = {coordsToVisit[i][0],coordsToVisit[i][1] + 1};
@@ -234,16 +234,16 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
       instructions[instructionc][0] = oldDir;
       switch(oldDir){
         case 0:
-          instructions[instructionc][1] = upc;
+          instructions[instructionc][1] = upc + 1;
           break;
         case 1:
-          instructions[instructionc][1] = rightc;
+          instructions[instructionc][1] = rightc + 1;
           break;
         case 2:
-          instructions[instructionc][1] = downc;
+          instructions[instructionc][1] = downc + 1;
           break;
         case 3:
-          instructions[instructionc][1] = leftc;
+          instructions[instructionc][1] = leftc + 1;
           break;
       }
       upc = 0;
