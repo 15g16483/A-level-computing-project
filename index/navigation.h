@@ -174,5 +174,68 @@ bool planRoute() { //find which coordinates the robot needs to visit
 };  
 
 void compileRoute() { //turn the coordinates into instructions for the robot. make as efficient as possible
-  
+  int oldDir = 0; //1st direction
+  int newDir; //2nd direction
+  int inc = 0; //default incrementing forwards
+  int instructionc = 0; //pointer to free element in instruction set
+  int upc = 0;
+  int rightc = 0;
+  int downc = 0;
+  int leftc = 0;
+  for(int i = coordsToVisitLength; i > -1; i--){
+    //find where the points would be
+    int up[2] = {coordsToVisit[i][0],coordsToVisit[i][1] + 1};
+    int right[2] = {coordsToVisit[i][0] + 1,coordsToVisit[i][1]};
+    int down[2] = {coordsToVisit[i][0],coordsToVisit[i][1] - 1};
+    int left[2] = {coordsToVisit[i][0] - 1,coordsToVisit[i][1]};
+
+    if(up[0] == coordsToVisit[i][0] && up[1] == coordsToVisit[i][1]){
+      newDir = 0;
+    }
+    if(right[0] == coordsToVisit[i][0] && right[1] == coordsToVisit[i][1]){
+      newDir = 1;
+    }
+    if(down[0] == coordsToVisit[i][0] && down[1] == coordsToVisit[i][1]){
+      newDir = 2;
+    }
+    if(left[0] == coordsToVisit[i][0] && left[1] == coordsToVisit[i][1]){
+      newDir = 3;
+    }
+    if(newDir == oldDir){
+      switch(inc){
+        case 0:
+          upc++;
+          break;
+        case 1:
+          rightc++;
+          break;
+        case 2:
+          downc++;
+          break;
+        case 3:
+          leftc++;
+          break;
+      }
+    }else{
+      //pass the instruction
+      newDir = inc;
+      instructions[instructionc][0] = oldDir;
+      switch(oldDir){
+        case 0:
+          instructions[instructionc][1] = upc;
+          break;
+        case 1:
+          instructions[instructionc][1] = rightc;
+          break;
+        case 2:
+          instructions[instructionc][1] = downc;
+          break;
+        case 3:
+          instructions[instructionc][1] = leftc;
+          break;
+      }
+    }
+    newDir = oldDir;
+    
+  }
 };

@@ -28,6 +28,13 @@ void loop(){
       Serial.println(coordsToVisit[i][1]);
     }
   }
+  delay(1000);//delay for stability
+  compileRoute();
+  for(int i = 0; i < 10; i++){
+     Serial.print(instructions[i][0]);
+     Serial.print(",");
+     Serial.println(instructions[i][1]);
+  }
   delay(10000);
 
 
