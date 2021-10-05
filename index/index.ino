@@ -22,7 +22,7 @@ void loop(){
   //expecting to see count down through coordinates from target down to the robots location (0,7)
   if(planRoute() == true){
     Serial.println("coordsToVisit:");
-    for(int i = 0; i < 20; i++){
+    for(int i = coordsToVisitLength; i > -1; i--){
       Serial.print(coordsToVisit[i][0]);
       Serial.print(",");
       Serial.println(coordsToVisit[i][1]);

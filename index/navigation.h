@@ -9,7 +9,6 @@ int coordsToVisit[20][2]; //where the plan route function pushes its output to
 int coordsToVisitLength = 0; //hae to read coordsToVisit in reverese, so this points to end of array.
 
 void identifyTarget() {
-  Serial.println("target");
   bool targetFound = false;
   for(int i = nextSpace - 1; i > 0; i--){
 
@@ -71,30 +70,27 @@ bool planRoute() { //find which coordinates the robot needs to visit
 
   int neighbour[2]; //holds the neighbour of the point being checked
 
-  Serial.println("hello");
 
   while(true){
-   // Serial.println(checking);
     //find if the coordinate we are checking is a space.
     bool inSpace = false;
-    for(int i = nextSpace - 1; i > 0; i--){ 
+    for(int i = nextSpace - 1; i > -1; i--){ 
       if(nextCheck[checking][0] == space[i][0] && nextCheck[checking][1] == space[i][1]){
         i = 0;
         inSpace = true;
       };
     };
-    Serial.println(checkSpace);
-    Serial.println(checking);
-    Serial.print(nextCheck[checking][0]);
-    Serial.print(",");
-    Serial.println(nextCheck[checking][1]);
-    Serial.print(target[0]);
-    Serial.print(",");
-    Serial.println(target[1]);
     if(nextCheck[checking][0] == target[0] && nextCheck[checking][1] == target[1]) {
+      //reset coordinates to visit
+      for(int y = 0; y < 20; y++){
+        coordsToVisit[y][0] = 0;
+        coordsToVisit[y][1] = 0;
+      }
+      coordsToVisitLength = 0;
       //builds the coordsToVisit array
       int nextUpload[2] = {nextCheck[checking][0], nextCheck[checking][1]};
-      for(int i = checking; i > 0; i--){
+      int pointer;
+      for(int i = checking; i > -1; i--){
         coordsToVisit[coordsToVisitLength][0] = nextUpload[0];
         coordsToVisit[coordsToVisitLength][1] = nextUpload[1];
 
@@ -102,9 +98,14 @@ bool planRoute() { //find which coordinates the robot needs to visit
         if(coordsToVisit[coordsToVisitLength][0] == robot.x && coordsToVisit[coordsToVisitLength][1] == robot.y){
           return true;
         };
+        for(int c = checking; c > -1; c--){
+          if(nextCheck[c][0] == nextUpload[0] && nextCheck[c][1] == nextUpload[1]){
+          pointer = c;
+          }
+        }
 
-        nextUpload[0] = nextCheck[checking][2];
-        nextUpload[1] = nextCheck[checking][3];
+        nextUpload[0] = nextCheck[pointer][2];
+        nextUpload[1] = nextCheck[pointer][3];
 
         coordsToVisitLength++;
 
@@ -133,23 +134,18 @@ bool planRoute() { //find which coordinates the robot needs to visit
         //check if the neighbour already exists in the nextCheck array
         bool exist = false;
         bool neighbInSpace = false;
-        for(int c = nextSpace - 1; c > 0; c--){
+        for(int c = nextSpace - 1; c > -1; c--){
           if(neighbour[0] == space[c][0] && neighbour[1] == space[c][1]){
             neighbInSpace = true;
             c = 0;
           }
         }
-        for(int z = checkSpace - 1; z > 0; z--){
+        for(int z = checkSpace - 1; z > -1; z--){
           if(neighbour[0] == nextCheck[z][0] && neighbour[1] == nextCheck[z][1] ){
             exist = true;
             z = 0;
           };
         }; 
-//        Serial.println(exist);
-//        Serial.println(neighbInSpace);
-//        Serial.print(neighbour[0]);
-//        Serial.print(",");
-//        Serial.println(neighbour[1]);
         if(exist == false && neighbInSpace == true){
           //set the next element to check to the neighbour
           nextCheck[checkSpace][0] = neighbour[0];
@@ -161,7 +157,6 @@ bool planRoute() { //find which coordinates the robot needs to visit
           checkSpace++;
           if(checkSpace == 80){
             //no more memory so have to return false
-            Serial.println("f1");
             return false;
           };
         };
@@ -171,7 +166,6 @@ bool planRoute() { //find which coordinates the robot needs to visit
     //after each check, need to update what to check for next iteration   
     checking++; //increment the next item to check
     if(checking == 80){
-      Serial.println("f2");
       return false;
     };
   }
