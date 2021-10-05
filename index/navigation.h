@@ -188,19 +188,32 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
     int right[2] = {coordsToVisit[i][0] + 1,coordsToVisit[i][1]};
     int down[2] = {coordsToVisit[i][0],coordsToVisit[i][1] - 1};
     int left[2] = {coordsToVisit[i][0] - 1,coordsToVisit[i][1]};
+//    Serial.print(up[0]);
+//    Serial.print(",");
+//    Serial.println(up[1]);
+//    Serial.print(right[0]);
+//    Serial.print(",");
+//    Serial.println(right[1]);
+//    Serial.print(down[0]);
+//    Serial.print(",");
+//    Serial.println(down[1]);
+//    Serial.print(left[0]);
+//    Serial.print(",");
+//    Serial.println(left[1]);
 
-    if(up[0] == coordsToVisit[i][0] && up[1] == coordsToVisit[i][1]){
+    if(up[0] == coordsToVisit[i-1][0] && up[1] == coordsToVisit[i-1][1]){
       newDir = 0;
     }
-    if(right[0] == coordsToVisit[i][0] && right[1] == coordsToVisit[i][1]){
+    if(right[0] == coordsToVisit[i-1][0] && right[1] == coordsToVisit[i-1][1]){
       newDir = 1;
     }
-    if(down[0] == coordsToVisit[i][0] && down[1] == coordsToVisit[i][1]){
+    if(down[0] == coordsToVisit[i-1][0] && down[1] == coordsToVisit[i-1][1]){
       newDir = 2;
     }
-    if(left[0] == coordsToVisit[i][0] && left[1] == coordsToVisit[i][1]){
+    if(left[0] == coordsToVisit[i-1][0] && left[1] == coordsToVisit[i-1][1]){
       newDir = 3;
     }
+    //Serial.println(newDir);
     if(newDir == oldDir){
       switch(inc){
         case 0:
