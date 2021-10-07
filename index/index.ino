@@ -2,6 +2,29 @@
 
 #include "navigation.h"
 
+//function that handles the beggining operations required for the robot
+void start(){
+  Serial.println("starting");
+  
+  while(true){
+    ping();
+    if(input[0] > 0.2){
+      forward();
+      if(robot.updateLocation() == true){
+        upMap();
+        Serial.print("L:");
+        Serial.print(robot.x);
+        Serial.print(",");
+        Serial.println(robot.y);
+      }
+    }else{
+      allStop();
+      break;
+    }
+  }
+  
+}
+
   
 //setup function gets called on arduino startup
 
@@ -9,69 +32,135 @@ void setup() {
   //begin serial communication
   Serial.begin(9600);
 
+  start();
+
 };
 
 //loop function is called recursivelly when the arduino is turned on
 
 void loop(){ 
-  identifyTarget();
-  Serial.println(target[0]);
-  Serial.println(target[1]);
-  //delay(500);
-
-  //expecting to see count down through coordinates from target down to the robots location (0,7)
-  if(planRoute() == true){
-    Serial.println("coordsToVisit:");
-    for(int i = coordsToVisitLength; i > -1; i--){
-      Serial.print(coordsToVisit[i][0]);
+  if(identifyTarget() == true){
+    Serial.print("Target: ");
+    Serial.print(target[0]);
+    Serial.print(",");
+    Serial.println(target[1]);
+    planRoute();
+    compileRoute();
+    Serial.print("Instructions: ");
+    for(int z = 0; z < 10; z++){
+      Serial.print("(");
+      Serial.print(instructions[z][0]);
       Serial.print(",");
-      Serial.println(coordsToVisit[i][1]);
+      Serial.print(instructions[z][1]);
+      Serial.print("), ");
     }
-  }
-  delay(1000);//delay for stability
-  compileRoute();
-  for(int i = 0; i < 10; i++){
-     Serial.print(instructions[i][0]);
-     Serial.print(",");
-     Serial.println(instructions[i][1]);
-  }
-  delay(10000);
-
-
-
-
-
+    Serial.println(" ");
   
-//  //ping the environment
-//  ping();
-//
-//  //update the location at the start of every loop
-//  if(robot.updateLocation() == true){
-//    //once location updated, update the map with the new information
-//    upMap();
-//  };
-//
-//
-//  //current navigation code to control where the robot goes based on the surroundings
-//  if(input[0] < 0.2){
-//    allstop();
-//    delay(500);
-//    if(input[1] > input[2] && input[0] < input[1]) {
-//      right();
-//    }else if(input[2] > input[1] && input[0] < input[2]) {
-//      left();
-//    }else{
-//      backwards();
-//      delay(10000);
-//      right();
-//    }
-//    allstop();
-//  }
-//  else {
-//    forward();
-//  };
-//
-//  delay(50);
-//
-
+    //execute compiled route
+    //iterate through instruction list
+    for(int instruct = 0; instruct < 10; instruct++){
+      if(instructions[instruct][1] != 0){
+        switch(instructions[instruct][0]){
+          case 0:
+            switch(robot.bearing){
+              case 0:
+                moving(instruct);
+                break;
+              case 1:
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 2:
+                left();
+                robot.updateBearing();
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 3:
+                right();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+            }
+            break;
+          case 1:
+            switch(robot.bearing){
+              case 1:
+                moving(instruct);
+                break;
+              case 2:
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 3:
+                left();
+                robot.updateBearing();
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 0:
+                right();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+            }
+            break;  
+          case 2:
+            switch(robot.bearing){
+              case 2:
+                moving(instruct);
+                break;
+              case 3:
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 0:
+                left();
+                robot.updateBearing();
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 1:
+                right();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+            }
+            break;
+          case 3:
+            switch(robot.bearing){
+              case 3:
+                moving(instruct);
+                break;
+              case 0:
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 1:
+                left();
+                robot.updateBearing();
+                left();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+              case 2:
+                right();
+                robot.updateBearing();
+                moving(instruct);
+                break;
+            }
+            break;
+        }
+      }
+    }
+  }else{
+    Serial.println("Program complete");
+  }
 }

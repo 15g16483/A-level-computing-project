@@ -17,7 +17,7 @@ int speedB = -400;
 int speedS = 0;
 
 //functions to be called in other files
-void allstop(){     //"stop" seems to be a reserved keyword
+void allStop(){     //"stop" seems to be a reserved keyword
   motors.setM1Speed(speedS);
   motors.setM2Speed(speedS);
 };

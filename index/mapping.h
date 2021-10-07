@@ -25,7 +25,7 @@ class Robot: public Coordinate {
     ping(); //call ping so that pingOnLoc in mapping.h has a value.
     //artificially name location for 5.2 test
     x = 0;
-    y = 7;
+    y = 0;
     pingOnLoc[0] = input[0];
   };
   
@@ -70,14 +70,10 @@ class Robot: public Coordinate {
 Robot robot;
 
 //these are the arrays that hold the points that are free and the points that are obstacles. Storing the coordinate values as int so I can store more. Just needs simple conversion to turn back to float form. 
-
-//artificially building arrays to test target location. expecting to target {-6,2} (made a mistake on other iterations. was always {-6,2})
-
-//getting stability issue with 5.2 testing so have to reduce size of these arrays to make stable again. need to simplify test as currently failing memory requirements for navigation
-short space[][2] = {{0,0},{-1,0},{-2,0},{-3,0},{-4,0},{-5,0},{-6,0},{1,0},{2,0},{3,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{0,7},{-1,1},{-2,1},{-3,1},{-4,1},{-5,1},{-6,1},{1,1},{2,1},{3,1},{-1,2},{-2,2},{-3,2},{-4,2},{-5,2},{-6,2},{1,2},{2,2},{3,2},{-1,3},{-2,3},{-3,3},{1,3},{2,3},{3,3},{-1,4},{-2,4},{-3,4},{1,4},{2,4},{3,4},{-1,5},{-2,5},{-3,5},{1,5},{2,5},{3,5},{-1,6},{-2,6},{-3,6},{1,6},{2,6},{3,6},{-1,7},{-2,7},{-3,7},{1,7},{2,7},{3,7}};
-int nextSpace = 65;
-short obstacle[][2] = {{0,8},{4,0},{4,1},{4,2},{4,3},{4,4},{4,5},{4,6},{4,7},{-4,3},{-4,4},{-4,5},{-4,6},{-4,7},{1,8},{2,8},{3,8},{-1,8},{-2,8},{-3,8},};
-int nextObstacle = 21;
+short space[150][2] = {{0,0}};
+int nextSpace = 1;
+short obstacle[40][2];
+int nextObstacle = 0;
 int coordinate[2];
 
  //now we need to check if this coordinate has already been recorded. Used later on in the main function

@@ -8,9 +8,8 @@ int coordsToVisit[20][2]; //where the plan route function pushes its output to
 
 int coordsToVisitLength = 0; //hae to read coordsToVisit in reverese, so this points to end of array.
 
-void identifyTarget() {
-  bool targetFound = false;
-  for(int i = nextSpace - 1; i > 0; i--){
+bool identifyTarget() {
+  for(int i = nextSpace - 1; i > -1; i--){
 
     //find the neighbours of the space and put into list
     int neighbours[4][2] = {{space[i][0], space[i][1] + 1}, {space[i][0] + 1, space[i][1]}, {space[i][0], space[i][1] - 1}, {space[i][0] - 1, space[i][1]}}; // top, right, bottom, left
@@ -47,16 +46,12 @@ void identifyTarget() {
       target[0] = space[i][0];
       target[1] = space[i][1];
 
-      targetFound = true;
-
-      //end the whole function so that no more unecessary comparrisons occur. This way the closest coordinate to the robot with an unexplored neighbour is targeted.
-      i = 0;
+      //end the function
+      return true;
     };
   }; //endfor
 
-  if(targetFound == false){
-    //declare an end to the progam. All spaces found
-  };
+  return false;
 };
 
 bool planRoute() { //find which coordinates the robot needs to visit
@@ -244,3 +239,24 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
     
   }
 };
+
+//function to repeat use whilst the robot is moving. handles updating locaction and map.
+void moving(int instruct){
+  while(true){
+    int count = 0;
+    ping();
+    forward();
+    if(robot.updateLocation() == true){
+      Serial.print("L:");
+      Serial.print(robot.x);
+      Serial.print(",");
+      Serial.println(robot.y);
+      upMap();
+      count++;
+      if(count == instructions[instruct][1]){
+        allStop();
+        break;
+      }
+    }
+  }
+}
