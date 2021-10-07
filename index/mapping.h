@@ -32,11 +32,11 @@ class Robot: public Coordinate {
   //create a method to update the location on call
   bool updateLocation(){
     if(pingOnLoc[0] - input[0] >= 0.1){
-      if(bearing == 1){
+      if(bearing == 0){
         y += 1;
-      }else if(bearing == 2){
+      }else if(bearing == 1){
         x += 1;
-      }else if(bearing == 3){
+      }else if(bearing == 2){
         y -= 1;
       }else{
         x -= 1;
@@ -109,7 +109,7 @@ void upMap() {
     
       //handles the assigning of the coordinate depending on the direction and used sensor. 
       //!!!WARNING!!! IF STATEMENT HELL AHEAD
-      if(robot.bearing == 1){
+      if(robot.bearing == 0){
         if(look == 0){
           coordinate[0] = robot.x;
           coordinate[1] = robot.y + dist;
@@ -120,7 +120,7 @@ void upMap() {
           coordinate[0] = robot.x  - dist;
           coordinate[1] = robot.y;
         };
-      }else if(robot.bearing == 2){
+      }else if(robot.bearing == 1){
         if(look == 0){
           coordinate[0] = robot.x  + dist;
           coordinate[1] = robot.y;
@@ -131,7 +131,7 @@ void upMap() {
           coordinate[0] = robot.x;
           coordinate[1] = robot.y + dist;
         };
-      }else if(robot.bearing == 3){
+      }else if(robot.bearing == 2){
         if(look == 0){
           coordinate[0] = (robot.x)*10;
           coordinate[1] = (robot.y - dist)*10;
