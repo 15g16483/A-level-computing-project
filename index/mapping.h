@@ -18,7 +18,7 @@ class Robot: public Coordinate {
 
   float pingOnLoc[3];
 
-  int bearing = 1; //direction will be 1 as forward, 2 as right, 3 as back and 4 as left.
+  int bearing = 0; //direction will be 0 as forward, 1 as right, 2 as back and 3 as left.
 
   //create constructor for robot
   Robot(){
@@ -56,13 +56,15 @@ class Robot: public Coordinate {
     pingOnLoc[0] = input[0]; //redefine location
 
     //make sure bearing doesn't become an invalid value
-    if(bearing == 0){
-      bearing = 4;
+    if(bearing == -1){
+      bearing = 3;
     };
 
-    if(bearing == 5) {
-      bearing = 1;
+    if(bearing == 4) {
+      bearing = 0  ;
     };
+    Serial.print("B:");
+    Serial.println(bearing);
   };
 };
 
