@@ -174,7 +174,7 @@ bool planRoute() { //find which coordinates the robot needs to visit
 };  
 
 void compileRoute() { //turn the coordinates into instructions for the robot. make as efficient as possible
-  int oldDir = 0; //1st direction
+  int oldDir = 5; //1st direction
   int newDir; //2nd direction
   int inc = 0; //default incrementing forwards
   int instructionc = 0; //pointer to free element in instruction set
@@ -188,18 +188,6 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
     int right[2] = {coordsToVisit[i][0] + 1,coordsToVisit[i][1]};
     int down[2] = {coordsToVisit[i][0],coordsToVisit[i][1] - 1};
     int left[2] = {coordsToVisit[i][0] - 1,coordsToVisit[i][1]};
-//    Serial.print(up[0]);
-//    Serial.print(",");
-//    Serial.println(up[1]);
-//    Serial.print(right[0]);
-//    Serial.print(",");
-//    Serial.println(right[1]);
-//    Serial.print(down[0]);
-//    Serial.print(",");
-//    Serial.println(down[1]);
-//    Serial.print(left[0]);
-//    Serial.print(",");
-//    Serial.println(left[1]);
 
     if(up[0] == coordsToVisit[i-1][0] && up[1] == coordsToVisit[i-1][1]){
       newDir = 0;
@@ -252,9 +240,6 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
       leftc = 0;
       instructionc++;
     }
-//    Serial.println("ch");
-//    Serial.println(newDir);
-//    Serial.println(oldDir);
     oldDir = newDir;
     
   }
