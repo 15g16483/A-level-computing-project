@@ -13,7 +13,7 @@ class Coordinate {
 
 //inherit coordinate class for the robot.
 
-class Robot: public Coordinate {
+class Robot: public Coordinate { //inheritance used to inherit coordinate location
   public:
 
   float pingOnLoc[3];
@@ -23,7 +23,6 @@ class Robot: public Coordinate {
   //create constructor for robot
   Robot(){
     ping(); //call ping so that pingOnLoc in mapping.h has a value.
-    //artificially name location for 5.2 test
     x = 0;
     y = 0;
     pingOnLoc[0] = input[0];
@@ -31,7 +30,7 @@ class Robot: public Coordinate {
   
   //create a method to update the location on call
   bool updateLocation(){
-    if(pingOnLoc[0] - input[0] >= 0.1){
+    if(pingOnLoc[0] - input[0] >= 0.1){ //if the robot has moved 10 cm, update its location
       if(bearing == 0){
         y += 1;
       }else if(bearing == 1){
@@ -41,6 +40,8 @@ class Robot: public Coordinate {
       }else{
         x -= 1;
       };
+
+      //redefine pingOnLoc for new location
       ping();
       for(int i = 0; i < 3; i++){
         pingOnLoc[i] = input[i];
@@ -52,7 +53,8 @@ class Robot: public Coordinate {
     };
   };
   void updateBearing(){ //this method handles everything after the bearing has been updated.
-    ping();
+   
+    ping(); //new orientation so sensors now facing new directions
     pingOnLoc[0] = input[0]; //redefine location
 
     //make sure bearing doesn't become an invalid value
@@ -63,8 +65,6 @@ class Robot: public Coordinate {
     if(bearing == 4) {
       bearing = 0  ;
     };
-    Serial.print("B:");
-    Serial.println(bearing);
   };
 };
 
@@ -73,17 +73,18 @@ Robot robot;
 
 //these are the arrays that hold the points that are free and the points that are obstacles. Storing the coordinate values as int so I can store more. Just needs simple conversion to turn back to float form. 
 short space[150][2] = {{0,0}};
-int nextSpace = 1;
+int nextSpace = 1; //counter used so that other functions know where to add new values to the array
 short obstacle[40][2];
 int nextObstacle = 0;
-int coordinate[2];
+int coordinate[2]; //global so all functions have access to the coordinate being checked.
 
  //now we need to check if this coordinate has already been recorded. Used later on in the main function
 bool coordRecorded(){
+  //is the coordinate in the spaces or obstacle function?
   for(int i = 0; i < 300; i++){
     if((space[i][0] == coordinate[0] && space[i][1] == coordinate[1]) || (obstacle[i][0] == coordinate[0] && obstacle[i][1] == coordinate[1])){
       return true;
-    }else if(i  >= nextSpace && i >= nextObstacle){
+    }else if(i  >= nextSpace && i >= nextObstacle){ //if we are past the point of actual data, stop the script to save comparisons
       return false;
     }else{
     };
@@ -91,15 +92,16 @@ bool coordRecorded(){
   return false;
 };
 
+//update the map at each location
 void upMap() {
   
-  for(int look = 0; look < 3; look++){
+  for(int look = 0; look < 3; look++){ //for each direction
 
     //check if we are hitting the wall
     bool wallHit = false;
-    for(int i = 0; i < 40; i++){
+    for(int i = 0; i < 40; i++){ //maximum distance of 4 metres, this is as far as the sensor is accurate to.
 
-      int dist = i; //cast the opperands to floats so that the division can take place
+      int dist = i;
       
       if((float)dist/(float)10 > robot.pingOnLoc[look]) {
         wallHit = true;
@@ -162,12 +164,13 @@ void upMap() {
           space[nextSpace][0] = coordinate[0];
           space[nextSpace][1] = coordinate[1];
 
-          
+          //space been used so need to redefine next free space
           nextSpace++;
         }else if(isElementPresent == false){
           obstacle[nextObstacle][0] = coordinate[0];
           obstacle[nextObstacle][1] = coordinate[1];
-          
+
+          //obstacle added so need to redefine next free obstacle
           nextObstacle++;
         };
       

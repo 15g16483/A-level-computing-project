@@ -1,29 +1,31 @@
 #include "motor_control.h"
 
-int instructions[10][2]; //first number is the bearing, second is the distance in terms of how many coordinate points to move. 
+int instructions[10][2]; //first number is the bearing the robot needs to be, second is the distance in terms of how many coordinate points to move. 
 
 int target[2]; //the target for the routing algorithm
 
-int coordsToVisit[20][2]; //where the plan route function pushes its output to
+int coordsToVisit[20][2]; //where the plan route function pushes its output to. These are the coordinates the robot visits on its route
 
-int coordsToVisitLength = 0; //hae to read coordsToVisit in reverese, so this points to end of array.
+int coordsToVisitLength = 0; //have to read coordsToVisit in reverse, so this points to end of array for compileroute function
 
-bool identifyTarget() {
+bool identifyTarget() { //is there a target to identify. If so, where?
+
+  //calculated in reverse so that it finds the target closest to the obstacle. 
   for(int i = nextSpace - 1; i > -1; i--){
 
     //find the neighbours of the space and put into list
     int neighbours[4][2] = {{space[i][0], space[i][1] + 1}, {space[i][0] + 1, space[i][1]}, {space[i][0], space[i][1] - 1}, {space[i][0] - 1, space[i][1]}}; // top, right, bottom, left
 
-    int neighbExplored = 0; //a count of how many of the neighbours are already explored. If this is 4 then all of them are there.
+    int neighbExplored = 0; //a count of how many of the neighbours are already explored. If this is 4 then all of them are explored and this point is not valid for a target.
 
-    //compare with obstacles array to potentially eliminate comparrisons
+    //compare with obstacles array to potentially eliminate comparisons in larger spaces array. If 
     for(int a = 0; a < 4; a++){
       for(int o = nextObstacle - 1; o > 0; o--){
-        if(neighbours[a][0] == obstacle[o][0] && neighbours[a][1] == obstacle[o][1]){
+        if(neighbours[a][0] == obstacle[o][0] && neighbours[a][1] == obstacle[o][1]){ //if the neighbour is in the obstacles array, this neighbour has already been explored. Do not compare it with spaces array.
           neighbExplored++;
           o = 0; //end this for loop. reduce comparisons.
 
-          //redefine the neighbours so that this coordinate doesn't get compared again. redefined to origin as this is guaranteed to be explored.
+          //redefine this neighbour so that this coordinate doesn't get compared again. redefined to origin as this is guaranteed to be explored.
           neighbours[a][0] = 0; 
           neighbours[a][1] = 0;
           
@@ -42,6 +44,8 @@ bool identifyTarget() {
         }; //endfor
       }; //endif
     }; //endfor
+
+    //if there are still unexplored spaces in the neighbours array, this space meets the conditions to be a target. 
     if(neighbExplored != 4){
       target[0] = space[i][0];
       target[1] = space[i][1];
@@ -54,10 +58,10 @@ bool identifyTarget() {
   return false;
 };
 
-bool planRoute() { //find which coordinates the robot needs to visit
+bool planRoute() { //find which coordinates the robot needs to visit. This algorithm follows similar steps to flood fill.
   //can only use 300 bytes of local variables within this function
 
-  int nextCheck[80][4] = {{robot.x, robot.y, robot.x, robot.y}};
+  int nextCheck[80][4] = {{robot.x, robot.y, robot.x, robot.y}}; //first coordinate is what is being checked. Second is the memory of how to get there.
 
   int checkSpace = 1; //next free space in nextCheck array, 
 
@@ -71,17 +75,21 @@ bool planRoute() { //find which coordinates the robot needs to visit
     bool inSpace = false;
     for(int i = nextSpace - 1; i > -1; i--){ 
       if(nextCheck[checking][0] == space[i][0] && nextCheck[checking][1] == space[i][1]){
+        //coordinate found. end check and return true
         i = 0;
         inSpace = true;
       };
     };
-    if(nextCheck[checking][0] == target[0] && nextCheck[checking][1] == target[1]) {
+    if(nextCheck[checking][0] == target[0] && nextCheck[checking][1] == target[1]) { 
+      //target has been found
+      
       //reset coordinates to visit
       for(int y = 0; y < 20; y++){
         coordsToVisit[y][0] = 0;
         coordsToVisit[y][1] = 0;
       }
       coordsToVisitLength = 0;
+      
       //builds the coordsToVisit array
       int nextUpload[2] = {nextCheck[checking][0], nextCheck[checking][1]};
       int pointer;
@@ -126,7 +134,7 @@ bool planRoute() { //find which coordinates the robot needs to visit
             neighbour[1] = nextCheck[checking][1];
             break;
         };
-        //check if the neighbour already exists in the nextCheck array
+        //check if the neighbour already exists in the nextCheck array and is in spaces
         bool exist = false;
         bool neighbInSpace = false;
         for(int c = nextSpace - 1; c > -1; c--){
@@ -142,13 +150,14 @@ bool planRoute() { //find which coordinates the robot needs to visit
           };
         }; 
         if(exist == false && neighbInSpace == true){
-          //set the next element to check to the neighbour
+          //conditions met for this neighbour to be checked
+          //set the next element to check to be the neighbour
           nextCheck[checkSpace][0] = neighbour[0];
           nextCheck[checkSpace][1] = neighbour[1];
           nextCheck[checkSpace][2] = nextCheck[checking][0];
           nextCheck[checkSpace][3] = nextCheck[checking][1];
   
-          //increment the next space to load.
+          //increment the next space to load
           checkSpace++;
           if(checkSpace == 80){
             //no more memory so have to return false
@@ -168,22 +177,24 @@ bool planRoute() { //find which coordinates the robot needs to visit
   
 };  
 
-void compileRoute() { //turn the coordinates into instructions for the robot. make as efficient as possible
-  int oldDir = 5; //1st direction
+void compileRoute() { //turn the coordinates into instructions for the robot.
+  int oldDir = 5; //1st direction. currently invalid so first instruction is always consistently invalid
   int newDir; //2nd direction
-  int inc = 0; //default incrementing forwards
+  int inc = 0; //default incrementing forwards. remembers what is currently incrementing
   int instructionc = 0; //pointer to free element in instruction set
-  int upc = 0;
+  //incrementers to keep track of distance
+  int upc = 0; 
   int rightc = 0;
   int downc = 0;
   int leftc = 0;
   for(int i = coordsToVisitLength; i > -1; i--){
-    //find where the points would be
+    //find where the points would be. e.g if the robot was travellling up on the map, where would it be etc.
     int up[2] = {coordsToVisit[i][0],coordsToVisit[i][1] + 1};
     int right[2] = {coordsToVisit[i][0] + 1,coordsToVisit[i][1]};
     int down[2] = {coordsToVisit[i][0],coordsToVisit[i][1] - 1};
     int left[2] = {coordsToVisit[i][0] - 1,coordsToVisit[i][1]};
 
+    //find the new direction depending on where the robot needs to visit.
     if(up[0] == coordsToVisit[i-1][0] && up[1] == coordsToVisit[i-1][1]){
       newDir = 0;
     }
@@ -196,6 +207,7 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
     if(left[0] == coordsToVisit[i-1][0] && left[1] == coordsToVisit[i-1][1]){
       newDir = 3;
     }
+    //if travelling same direction as last, increment the distance value
     if(newDir == oldDir && i != 0){
       switch(inc){
         case 0:
@@ -212,9 +224,10 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
           break;
       }
     }else{
-      //pass the instruction
-      inc = newDir;
+      //change of direction occurred. pass the instruction to the instruction array
+      inc = newDir; //redefine the new counter
       instructions[instructionc][0] = oldDir;
+      //pass correct incrementor to the distance
       switch(oldDir){
         case 0:
           instructions[instructionc][1] = upc + 1;
@@ -229,12 +242,14 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
           instructions[instructionc][1] = leftc + 1;
           break;
       }
+      //reset incrementors for when they next need to be used
       upc = 0;
       rightc = 0;
       downc = 0;
       leftc = 0;
       instructionc++;
     }
+    //redefine the oldDir
     oldDir = newDir;
     
   }
@@ -242,18 +257,17 @@ void compileRoute() { //turn the coordinates into instructions for the robot. ma
 
 //function to repeat use whilst the robot is moving. handles updating locaction and map.
 void moving(int instruct){
+  int count = 0;
   while(true){
-    int count = 0;
+    //keep goind forward
     ping();
     forward();
     if(robot.updateLocation() == true){
-      Serial.print("L:");
-      Serial.print(robot.x);
-      Serial.print(",");
-      Serial.println(robot.y);
+      //if location has updated, update map and check if the correct distance has been travelled for this instruction
       upMap();
       count++;
       if(count == instructions[instruct][1]){
+        //turning point reached, this instruction has been completed so go back to index.ino for next instruction.
         allStop();
         break;
       }

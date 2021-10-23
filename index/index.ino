@@ -8,6 +8,7 @@ void start(){
   
   while(true){
     ping();
+    upMap();
     if(input[0] > 0.2){
       forward();
       if(robot.updateLocation() == true){
@@ -39,48 +40,50 @@ void setup() {
 //loop function is called recursivelly when the arduino is turned on
 
 void loop(){ 
-  if(identifyTarget() == true){
-    Serial.print("Target: ");
-    Serial.print(target[0]);
-    Serial.print(",");
-    Serial.println(target[1]);
-    planRoute();
-    compileRoute();
-    Serial.print("Instructions: ");
-    for(int z = 0; z < 10; z++){
+  if(identifyTarget() == true){ //has the robot been able to find a suitable target?
+
+    //relay data back to the monitor
+    Serial.println("Obstacles");
+    if(int i = nextObstacle - 1; i > -1; i--){
       Serial.print("(");
-      Serial.print(instructions[z][0]);
+      Serial.print(obstacles[i][0]);
       Serial.print(",");
-      Serial.print(instructions[z][1]);
+      Serial.print(obstacles[i][1]);
       Serial.print("), ");
     }
     Serial.println(" ");
+
+    //use code written in navigation script to build an instruction set for the robot to run
+    planRoute();
+    compileRoute();
   
     //execute compiled route
     //iterate through instruction list
     for(int instruct = 0; instruct < 10; instruct++){
-      if(instructions[instruct][1] != 0){
+      
+      if(instructions[instruct][1] != 0){ //filter out values where distance value does not equal 0
+        //depending on the current bearing and direction of the robot, reorientate the robot to face correct direction, then move
         switch(instructions[instruct][0]){
           case 0:
             switch(robot.bearing){
               case 0:
-                moving(instruct);
+                moving(instruct); //moving found in navigation.h
                 break;
               case 1:
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 2:
                 left();
-                robot.updateBearing();
+                
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 3:
                 right();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
             }
@@ -92,19 +95,19 @@ void loop(){
                 break;
               case 2:
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 3:
                 left();
-                robot.updateBearing();
+                
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 0:
                 right();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
             }
@@ -116,19 +119,19 @@ void loop(){
                 break;
               case 3:
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 0:
                 left();
-                robot.updateBearing();
+                
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 1:
                 right();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
             }
@@ -140,19 +143,19 @@ void loop(){
                 break;
               case 0:
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 1:
                 left();
-                robot.updateBearing();
+                
                 left();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
               case 2:
                 right();
-                robot.updateBearing();
+                
                 moving(instruct);
                 break;
             }
@@ -161,6 +164,7 @@ void loop(){
       }
     }
   }else{
+    //if no target is found, the entire area must be explored, so program complete
     Serial.println("Program complete");
   }
 }
